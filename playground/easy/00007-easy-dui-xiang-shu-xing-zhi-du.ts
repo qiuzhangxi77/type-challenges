@@ -33,7 +33,9 @@
 
 /* _____________ 你的代码 _____________ */
 
-type MyReadonly<T> = any
+type MyReadonly<T> = {
+  readonly [P in keyof T]: T[P]
+}
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -57,3 +59,25 @@ interface Todo1 {
   > 查看解答：https://tsch.js.org/7/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+// Note:
+// readonly 知识点
+// https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#readonly-and-const
+// readonly and const
+
+
+// In JavaScript, mutability is the default, although it allows variable declarations with const to declare that the reference is immutable.
+//  The referent is still mutable
+// const a = [1, 2, 3];
+// a.push(102); // ):
+// a[0] = 101; // D:
+
+
+// TypeScript additionally has a readonly modifier for properties.
+// interface Rx {
+//   readonly x: number;
+// }
+// let rx: Rx = { x: 1 };
+// rx.x = 12; // error
+
+
