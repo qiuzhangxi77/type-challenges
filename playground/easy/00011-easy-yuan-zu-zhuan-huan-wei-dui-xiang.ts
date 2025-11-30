@@ -20,7 +20,12 @@
 
 /* _____________ 你的代码 _____________ */
 
-type TupleToObject<T extends readonly any[]> = any
+// type TupleToObject<T extends readonly any[]> = any
+
+// Solution:
+type TupleToObject<T extends readonly (string | number | symbol)[]> = {
+  [P in T[number]]: P
+}
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -48,3 +53,9 @@ type error = TupleToObject<[[1, 2], {}]>
   > 查看解答：https://tsch.js.org/11/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+// Note:
+// 知识点：
+// T[number] 取元组中的每个元素 获取联合类型
+const test = ['123', '456'] as const;
+type a =  (typeof test)[number]
