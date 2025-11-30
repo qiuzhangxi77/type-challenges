@@ -31,7 +31,13 @@
 
 /* _____________ 你的代码 _____________ */
 
-type MyPick<T, K> = any
+// type MyPick<T, K> = any
+
+// Solution:
+type MyPick<T, K extends keyof T> = {
+  [P in K]: T[P]
+}
+
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -64,3 +70,41 @@ interface Expected2 {
   > 查看解答：https://tsch.js.org/4/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+
+
+
+// Note:
+// 题解：https://github.com/type-challenges/type-challenges/issues/13427
+// 知识点：
+// keyof: 取interface的键后保存为联合类型
+interface userInfo {
+  name: string
+  age: number
+}
+type keyofValue = keyof userInfo
+// keyofValue = "name" | "age"
+
+// in: 取联合类型的值，主要用于数组和对象的构建
+type name = 'firstname' | 'lastname'
+type TName = {
+  [key in name]: string
+}
+
+// 用于实际开发，举个例子：
+// function getValue(o:object, key: string){
+//   return o[key]
+// }
+// const obj1 = { name: '张三', age: 18 }
+// const values = getValue(obj1, 'name')
+
+// 这样写丧失了ts的优势：
+// 无法确定返回值类型
+// 无法对key进行约束
+
+function getValue<T extends Object,K extends keyof T>(o: T,key: K): T[K] {
+  return o[key]
+}
+const obj1 = { name: '张三', age: 18}
+const values = getValue(obj1, 'name')
+// 如果第二个参数不是obj1中的参数就会报错
