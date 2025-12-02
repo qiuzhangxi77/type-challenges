@@ -19,7 +19,8 @@
 
 /* _____________ 你的代码 _____________ */
 
-type If<C, T, F> = any
+// type If<C, T, F> = any
+type If<C extends boolean, T, F> = C extends true ? T : (C extends false ? F : T | F)
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -39,3 +40,19 @@ type error = If<null, 'a', 'b'>
   > 查看解答：https://tsch.js.org/268/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+// Note:
+// 知识点:
+// b
+// T extends  U ? A : B
+// 如果T是A类型，则返回A类型，否则返回B类型
+// 例如：
+// type Test = 1 extends 1 ? true : false
+// 这里的1 extends 1 就是条件类型，1是A类型，1是B类型
+// 如果1是1类型，则返回true类型，否则返回false类型
+// 这里的1 extends 1 就是条件类型，1是A类型，1是B类型
+
+// boolean 类型的 extends 检查
+// true extends boolean ? true : false  // true
+// false extends boolean ? true : false  // true
+// boolean extends boolean ? true : false  // true
