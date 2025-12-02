@@ -22,7 +22,11 @@
 
 /* _____________ 你的代码 _____________ */
 
-type MyAwaited<T> = any
+// type MyAwaited<T> = any
+type MyPromise<T> = Promise<T> | {
+  then: (onfulfilled: (arg: T) => any) => any
+}
+type MyAwaited<T extends MyPromise<any>> = T extends MyPromise<infer U> ? (U extends MyPromise<any> ? MyAwaited<U> : U) : never
 
 /* _____________ 测试用例 _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -47,3 +51,21 @@ type cases = [
   > 查看解答：https://tsch.js.org/189/solutions
   > 更多题目：https://tsch.js.org/zh-CN
 */
+
+// Note:
+// 知识点：
+
+// never 类型
+//  never 是 TypeScript 的底部类型
+// 在联合类型中会被自动过滤掉
+// type Test = 'a' | never | 'b'  // 'a' | 'b'
+
+// infer 类型推断
+// 在类型中使用 infer 类型推断，获取实际的类型中
+// infer U 就是推断出U类型
+// 例如：
+// type MyAwaited<T extends MyPromise<any>> = T extends MyPromise<infer U> ? (U extends MyPromise<any> ? MyAwaited<U> : U) : never
+// 这里的 infer U 就是类型推断，获取类型中的类型
+
+// 类型递归(type recursion)
+// 在类型中使用递归，获取深层次的类型
